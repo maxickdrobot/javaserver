@@ -21,7 +21,7 @@ public class DocumentResponseService {
     record GroupKey(int studentYear, String degreeName, String tuitionForm, String specialityCode, String specializationName, String specialityName) {}
 
     public List<CourseForStudent> getStudents(List<Long> groupIds) {
-        List<com.drobot.coursework.javaserver.entity.CourseForStudent> data =
+        List<com.drobot.coursework.javaserver.entity.CourseForStudent> filteredCourseForStudents =
                 courseForStudentRepository.findAll().stream()
                         .filter(record ->
                                 groupIds.contains(record.getStudentDegree().getStudentGroup().getId()) &&
@@ -30,7 +30,7 @@ public class DocumentResponseService {
                         .toList();
 
         List<CourseForStudent> result = new ArrayList<>();
-        Map<GroupKey, List<com.drobot.coursework.javaserver.entity.CourseForStudent>> grouped = data.stream().collect(Collectors.groupingBy(record -> {
+        Map<GroupKey, List<com.drobot.coursework.javaserver.entity.CourseForStudent>> grouped = filteredCourseForStudents.stream().collect(Collectors.groupingBy(record -> {
             StudentDegree degree = record.getStudentDegree();
             return new GroupKey(
                     degree.getStudentGroup().getCurrentCourse(),
