@@ -13,8 +13,6 @@ import java.io.FileNotFoundException;
 @AllArgsConstructor
 public class DocumentResponseController {
 
-
-//    private final com.drobot.coursework.javaserver.service.DocumentResponseController documentResponseController;
     protected static final String MEDIA_TYPE_DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     protected static final String MEDIA_TYPE_PDF = "application/pdf";
 

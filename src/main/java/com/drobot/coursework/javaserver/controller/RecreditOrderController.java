@@ -26,8 +26,8 @@ public class RecreditOrderController extends DocumentResponseController{
     @GetMapping("/recredit-order/docx")
     public ResponseEntity<Resource> generateForGroup(@RequestParam List<Long> studentGroupIds) throws Exception {
         List<CourseForStudent> recreditOrderDataBeans = documentResponseService.getStudents(studentGroupIds);
-        File examReport = recreditOrderService.generateReports(recreditOrderDataBeans, FileFormatEnum.DOCX);
-        return buildDocumentResponseEntity(examReport, examReport.getName(), MEDIA_TYPE_DOCX);
+        File recreditOrder = recreditOrderService.generateOrders(recreditOrderDataBeans, FileFormatEnum.DOCX);
+        return buildDocumentResponseEntity(recreditOrder, recreditOrder.getName(), MEDIA_TYPE_DOCX);
     }
 
 }

@@ -20,11 +20,11 @@ public class DocumentResponseService {
 
     record GroupKey(int studentYear, String degreeName, String tuitionForm, String specialityCode, String specializationName, String specialityName) {}
 
-    public List<CourseForStudent> getStudents(List<Long> groupIds) {
+    public List<CourseForStudent> getStudents(List<Long> studentGroupIds) {
         List<com.drobot.coursework.javaserver.entity.CourseForStudent> filteredCourseForStudents =
                 courseForStudentRepository.findAll().stream()
                         .filter(record ->
-                                groupIds.contains(record.getStudentDegree().getStudentGroup().getId()) &&
+                                studentGroupIds.contains(record.getStudentDegree().getStudentGroup().getId()) &&
                                         record.getCourseType() == CourseType.RECREDIT
                         )
                         .toList();

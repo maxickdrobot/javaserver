@@ -3,6 +3,7 @@ package com.drobot.coursework.javaserver.service;
 import org.docx4j.XmlUtils;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.wml.Br;
 import org.docx4j.wml.P;
 import org.docx4j.wml.Tbl;
 import org.docx4j.wml.Tr;
@@ -15,7 +16,7 @@ import java.util.*;
 @Service
 public class RecreditOrderService extends DocumentIOService {
 
-    public File generateReports(List<CourseForStudent> courseForStudents, FileFormatEnum format)
+    public File generateOrders(List<CourseForStudent> courseForStudents, FileFormatEnum format)
             throws Docx4JException, FileNotFoundException {
         if (courseForStudents == null || courseForStudents.isEmpty()) {
             throw new IllegalArgumentException("CourseForStudents list is empty or null");
@@ -46,21 +47,29 @@ public class RecreditOrderService extends DocumentIOService {
         boolean first = true;
         for (CourseForStudent courseForStudent : courseForStudents) {
             if (!first) {
-                TemplateUtil.createLineBreak();
+                P breakParagraph = new P();
+                Br lineBreak = TemplateUtil.createLineBreak();
+                breakParagraph.getContent().add(lineBreak);
+                template.getMainDocumentPart().getContent().add(breakParagraph);
             }
+
 
             P newGroupInfoParagraph = (P) XmlUtils.deepCopy(groupInfoParagraphTemplate);
             template.getMainDocumentPart().getContent().add(newGroupInfoParagraph);
             TemplateUtil.replaceTextPlaceholdersInElement(newGroupInfoParagraph, Map.of(
                     "StudentYear", String.valueOf(courseForStudent.getStudentYear()),
-                    "Degree", courseForStudent.getDegree(),
-                    "TuitionForm", courseForStudent.getTuitionForm(),
+                    "Degree", courseForStudent.getDegree().toLowerCase(),
+                    "TuitionForm", EducationFormUtil.toGenitive(courseForStudent.getTuitionForm()),
                     "codeSpecialization", courseForStudent.getSpecialityCode(),
                     "nameSpecialization", courseForStudent.getSpecializationName(),
                     "nameSpeciality", courseForStudent.getSpecialityName()
             ), false);
 
             for (Student student : courseForStudent.getStudents()) {
+                P breakParagraph = new P();
+                Br lineBreak = TemplateUtil.createLineBreak();
+                breakParagraph.getContent().add(lineBreak);
+                template.getMainDocumentPart().getContent().add(breakParagraph);
                 String key = student.getFullName() + "_" + courseForStudent.getStudentYear() + "_" + courseForStudent.getSpecialityCode();
                 List<Course> courses = student.getCourses();
 
